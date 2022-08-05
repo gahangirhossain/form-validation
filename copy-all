@@ -1,0 +1,130 @@
+
+import {useState} from 'react'
+
+function App(){
+  /*  1st way
+ const[firstName,setfirstName]=useState('')
+  const[lastName,setLastName]=useState('')*/
+
+  // 2nd way
+  const[userInfo,setUserInfo]=useState({
+    firstName:'',
+    lastName:'',
+    age:'',
+    profession:'lawyar',
+    gender:'male',
+  })
+const handleChange=(evt)=>{
+//  state ke update korte setuserinfo ke diclar korte hobe
+ setUserInfo({
+  ...userInfo,
+  [evt.target.name]:evt.target.value
+ })
+ setErrorInfo('')
+}
+// error handle korte and user information submit korle backend thake data error handle korte hobe
+// nicher line ke single way te error create korte change kore lakha jai.r validation o single way te hobe
+// const[errorInfo,setErrorInfo]=useState(null)
+const[errorInfo,setErrorInfo]=useState({
+  firstName:'',
+  lastName:'',
+  age:''
+})
+const handleSubmit=(evt)=>{
+  evt.preventDefault()
+  // destructure korte hobe 
+  const{firstName,lastName,age,profession,gender}=userInfo
+  // validation multiple way
+
+  // if(firstName===''||lastName===''||age===''){
+  //   setErrorInfo('please provide necessary information')
+  //   return
+  // }
+
+  // validation single way
+  if(firstName===''){
+    setErrorInfo({
+      ...errorInfo,
+      firstName:'please provide firstname'
+    })
+    return
+  }
+  if(lastName===''){
+    setErrorInfo({
+      ...errorInfo,
+      lastName:'please provide lastName'
+    })
+    return
+  }
+  if(age===''){
+    setErrorInfo({
+      ...errorInfo,
+      age:'please provide age'
+    })
+    return
+  }
+  // last of all reset korte hobe ty 
+  setUserInfo({
+    firstName:'',
+    lastName:'',
+    age:'',
+    profession:'lawyar',
+    gender:'male',
+  })
+  console.log('submitting')
+  console.log(userInfo)
+}
+//  onchange event e value bosanor jonno distracture kore nilam
+const{firstName,lastName,age,profession,gender}=userInfo
+  return(
+    <>
+    {/* {errorInfo && errorInfo} */}
+    <form  className='main-form' onSubmit={handleSubmit}>
+        <div className='center'>
+          <div className="Form-group inputform">  
+          {errorInfo.firstName && errorInfo.firstName}
+           <br/>      
+           <label htmlFor='firstName'>FirstName:</label><br/>         
+           {/* 1st way <input type='text' id='firstName' name='firstName' value={firstName} onChange={evt=>setfirstName(evt.target.value)} /> */}
+           <input type='text' id='firstName' name='firstName' value={firstName} onChange={handleChange} />
+
+           </div>
+           <div className="Form-group inputform">
+           {errorInfo.lastName && errorInfo.lastName}
+             <br/>
+             <label htmlFor='lastName'>LastName:</label><br/>
+             <input type='text' id='lastName' name='lastName'value={lastName} onChange={handleChange} />
+           </div>
+           <div className="Form-group inputform">
+           {errorInfo.age && errorInfo.age}
+             <label htmlFor='age'>Age:</label><br/>
+             <input type='number' id='age' name='age' value={age} onChange={handleChange}/>
+           </div>
+
+          <div className="Form-group inputform">
+            <label htmlFor='profession'>Profession:</label><br/>
+           <select id='profession' name="profession" onChange={handleChange} value={profession}>
+              <option value='doctor'>Doctor</option>
+              <option value='engeneer'>Engineer</option>
+              <option value='lawyar'>Lawyer</option>
+              <option value='teacher'>Teacher</option>
+            </select>
+         </div>
+
+          <div className='inputform'>
+            <label htmlFor='gender'>Gender:</label><br/>
+            Male:<input type='radio'name='gender' value='male'checked={gender==='male'} onChange={handleChange}/>
+            Female:<input type='radio' name='gender'value='female' checked={gender==='female'}onChange={handleChange}/>
+           </div>
+
+          <input type='submit' value='submit' />
+      </div>
+     </form>
+    </>
+  )
+}
+export default App
+
+
+
+
